@@ -4,10 +4,18 @@ from django.http import HttpResponse
 
 
 def home(request):
-    return HttpResponse("Hello, Django!")
+    return render(request, "hello/home.html")
 
 
-def hello_there(request, name):
+def about(request):
+    return render(request, "hello/about.html")
+
+
+def contact(request):
+    return render(request, "hello/contact.html")
+
+
+""" def hello_there(request, name):
     return render(
         request,
         'hello/hello_there.html',
@@ -15,4 +23,4 @@ def hello_there(request, name):
             'name': name,
             'date': datetime.now()
         }
-    )
+    ) """
