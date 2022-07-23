@@ -25,3 +25,7 @@
     padding: 5px;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+input[name=message] {
+    width: 80%;
+}
