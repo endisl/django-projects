@@ -1,3 +1,5 @@
 .venv
 storefront/__pycache__
 storefront/settings.py
+playground/__pycache__
+db.sqlite3
