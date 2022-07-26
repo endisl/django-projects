@@ -1,2 +1,3 @@
-#ndion
-Pipfile.lock
+.venv
+storefront/__pycache__
+storefront/settings.py
