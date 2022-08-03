@@ -3,7 +3,7 @@ from django.db import models
 
 class Promotion(models.Model):
     description = models.CharField(max_length=255)
-    discout = models.FloatField()
+    discount = models.FloatField()
 
 
 class Collection(models.Model):
@@ -20,7 +20,7 @@ class Product(models.Model):
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
-    promotion = models.ManyToManyField(Promotion)
+    promotions = models.ManyToManyField(Promotion)
 
 
 class Customer(models.Model):
@@ -31,9 +31,8 @@ class Customer(models.Model):
     MEMBERSHIP_CHOICES = [
         (MEMBERSHIP_BRONZE, 'Bronze'),
         (MEMBERSHIP_SILVER, 'Silver'),
-        (MEMBERSHIP_GOLD, 'Gold')
+        (MEMBERSHIP_GOLD, 'Gold'),
     ]
-
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
@@ -47,7 +46,6 @@ class Order(models.Model):
     PAYMENT_STATUS_PENDING = 'P'
     PAYMENT_STATUS_COMPLETE = 'C'
     PAYMENT_STATUS_FAILED = 'F'
-
     PAYMENT_STATUS_CHOICES = [
         (PAYMENT_STATUS_PENDING, 'Pending'),
         (PAYMENT_STATUS_COMPLETE, 'Complete'),
