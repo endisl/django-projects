@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from .models import Members
+from django.db.models import Q
 
 
 def index(request):
@@ -57,7 +58,10 @@ def updaterecord(request, id):
 
 
 def testing(request):
-    mydata = Members.objects.all()
+    #mydata = Members.objects.filter(lastname='Doe', id=3).values()
+    #mydata = Members.objects.filter(firstname='John').values() | Members.objects.filter(firstname='Tobias').values()
+    #mydata = Members.objects.filter(Q(firstname='John') | Q(firstname='Tobias')).values()
+    mydata = Members.objects.filter(firstname__startswith='L').values()
     template = loader.get_template('template.html')
     context = {
         'mymembers': mydata,
