@@ -58,10 +58,13 @@ def updaterecord(request, id):
 
 
 def testing(request):
+    #mydata = Members.objects.values_list('firstname')
     #mydata = Members.objects.filter(lastname='Doe', id=3).values()
     #mydata = Members.objects.filter(firstname='John').values() | Members.objects.filter(firstname='Tobias').values()
     #mydata = Members.objects.filter(Q(firstname='John') | Q(firstname='Tobias')).values()
-    mydata = Members.objects.filter(firstname__startswith='L').values()
+    #mydata = Members.objects.filter(firstname__startswith='L').values()
+    #mydata = Members.objects.order_by('-firstname').values()
+    mydata = Members.objects.all().order_by('lastname', '-id').values()
     template = loader.get_template('template.html')
     context = {
         'mymembers': mydata,
