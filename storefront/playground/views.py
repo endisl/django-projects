@@ -4,9 +4,6 @@ from store.models import Product
 
 
 def say_hello(request):
-    try:
-        product = Product.objects.get(pk=0)
-    except ObjectDoesNotExist:
-        pass
+    product = Product.objects.filter(pk=0).first()  # return None
 
     return render(request, 'hello.html', {'name': 'John'})
