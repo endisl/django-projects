@@ -8,11 +8,12 @@
   {% endif %}
   <ul>
     {% for result in results %}
+    <li>{{ result.title }}</li>
     <!-- <li>{{ result.email }}</li> -->
     <!-- <li>{{ result.title }} {{ result.featured_product }}</li> -->
     <!-- <li>{{ result.title }} {{ result.inventory }}</li> -->
     <!-- <li>{{ result.customer.email }} {{ result.payment_status }}</li> -->
-    <li>{{ result.product.collection.title }}</li>
+    <!-- <li>{{ result.product.collection.title }}</li> -->
     {% endfor %}
   </ul>
 </body>

@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from store.models import Collection, Customer, Order, OrderItem, Product
 
 
 def say_hello(request):
+    query_set = Product.objects.filter(
+        Q(inventory__lt=10) & ~Q(unit_price__lt=20))
+
     # Customers with .com accounts
     # query_set = Customer.objects.filter(email__icontains='.com')
 
@@ -17,6 +21,6 @@ def say_hello(request):
     # query_set = Order.objects.filter(customer__id=1)
 
     # Order items for products in collection 3
-    query_set = OrderItem.objects.filter(product__collection__id=3)
+    # query_set = OrderItem.objects.filter(product__collection__id=3)
 
     return render(request, 'hello.html', {'name': 'John', 'results': list(query_set)})
