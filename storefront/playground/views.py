@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, F
 from store.models import Collection, Customer, Order, OrderItem, Product
 
 
 def say_hello(request):
-    query_set = Product.objects.filter(
-        Q(inventory__lt=10) & ~Q(unit_price__lt=20))
+    query_set = Product.objects.filter(inventory=F('collection_id'))
+
+    #query_set = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
 
     # Customers with .com accounts
     # query_set = Customer.objects.filter(email__icontains='.com')
