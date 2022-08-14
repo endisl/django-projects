@@ -5,7 +5,20 @@ from store.models import Collection, Customer, Order, OrderItem, Product
 
 
 def say_hello(request):
-    query_set = Product.objects.filter(inventory=F('collection_id'))
+    arg = OrderItem.objects.values('product_id').distinct()
+    queryset = Product.objects.filter(id__in=arg).order_by('title')
+
+    #queryset = Product.objects.values_list('id', 'title', 'collection__title')
+
+    #queryset = Product.objects.all()[5:10]
+
+    #product = Product.objects.order_by('unit_price')[0]
+    #product = Product.objects.earliest('unit_price')
+    #product = Product.objects.latest('unit_price')
+
+    #query_set = Product.objects.filter(collection__id=1).order_by('unit_price', '-title').reverse()
+
+    #query_set = Product.objects.filter(inventory=F('collection__id'))
 
     #query_set = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
 
@@ -24,4 +37,4 @@ def say_hello(request):
     # Order items for products in collection 3
     # query_set = OrderItem.objects.filter(product__collection__id=3)
 
-    return render(request, 'hello.html', {'name': 'John', 'results': list(query_set)})
+    return render(request, 'hello.html', {'name': 'John', 'results': list(queryset)})
