@@ -6,16 +6,19 @@
   {% else %}
   <h1>Hello World</h1>
   {% endif %}
-  <ul>
+
+  {{ result }}
+
+  <!-- <ul>
     {% for result in results %}
     <li>{{ result.id }} - {{result.customer.first_name}}</li>
-    <!-- <li>{{ result.email }}</li> -->
-    <!-- <li>{{ result.title }} {{ result.featured_product }}</li> -->
-    <!-- <li>{{ result.title }} {{ result.inventory }}</li> -->
-    <!-- <li>{{ result.customer.email }} {{ result.payment_status }}</li> -->
-    <!-- <li>{{ result.product.collection.title }}</li> -->
-    {% endfor %}
-  </ul>
+     <li>{{ result.email }}</li> -->
+  <!-- <li>{{ result.title }} {{ result.featured_product }}</li> -->
+  <!-- <li>{{ result.title }} {{ result.inventory }}</li> -->
+  <!-- <li>{{ result.customer.email }} {{ result.payment_status }}</li> -->
+  <!-- <li>{{ result.product.collection.title }}</li> -->
+  <!-- {% endfor %} -->
+  <!-- </ul>  -->
 </body>
 
 </html>
