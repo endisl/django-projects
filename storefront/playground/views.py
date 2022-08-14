@@ -5,8 +5,17 @@ from store.models import Collection, Customer, Order, OrderItem, Product
 
 
 def say_hello(request):
-    arg = OrderItem.objects.values('product_id').distinct()
-    queryset = Product.objects.filter(id__in=arg).order_by('title')
+    queryset = Order.objects.select_related(
+        'customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
+
+    #queryset = Product.objects.prefetch_related('promotions').select_related('collection').all()
+
+    #queryset = Product.objects.select_related('collection').all()
+
+    #queryset = Product.objects.defer('description', 'slug')
+
+    #arg = OrderItem.objects.values('product_id').distinct()
+    #queryset = Product.objects.filter(id__in=arg).order_by('title')
 
     #queryset = Product.objects.values_list('id', 'title', 'collection__title')
 
