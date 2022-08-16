@@ -6,8 +6,22 @@ from store.models import Collection, Customer, Order, OrderItem, Product
 
 
 def say_hello(request):
+    # What is the min, max and average price of the products in collection 3?
     result = Product.objects.filter(collection__id=3).aggregate(
-        count=Count('id'), min_price=Min('unit_price'))
+        min_price=Min('unit_price'), max_price=Max('unit_price'), avg_price=Avg('unit_price'))
+
+    # How many orders has customer 1 placed? -> 5
+    #result = Order.objects.filter(customer__id=1).aggregate(count=Count('id'))
+
+    # How many units of product 1 have we sold? -> 4
+    # result = OrderItem.objects.filter(
+    #    product__id=1).aggregate(sold_units=Sum('quantity'))
+
+    # How many orders do we have? -> 1000
+    #result = Order.objects.aggregate(count=Count('id'))
+
+    # result = Product.objects.filter(collection__id=3).aggregate(
+    #    count=Count('id'), min_price=Min('unit_price'))
 
     # queryset = Order.objects.select_related(
     #    'customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
