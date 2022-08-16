@@ -1,14 +1,35 @@
 from django.shortcuts import render
+from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField
+from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q, F
 from store.models import Collection, Customer, Order, OrderItem, Product
 
 
 def say_hello(request):
+    discounted_price = ExpressionWrapper(
+        F('unit_price') * 0.8, output_field=DecimalField())
+    queryset = Product.objects.annotate(discounted_price=discounted_price)
+
+    #queryset = Customer.objects.annotate(orders_count=Count('order'))
+
+    # queryset = Customer.objects.annotate(
+    # concat
+    #    full_name=Func(F('first_name'), Value(
+    #        ' '), F('last_name'), function='CONCAT')
+    # )
+
+    # queryset = Customer.objects.annotate(
+    # concat
+    #    full_name=Concat('first_name', Value(' '), 'last_name')
+    # )
+
+    #queryset = Customer.objects.annotate(new_id=F('id')+1)
+    #queryset = Customer.objects.annotate(is_new=Value(True))
+
     # What is the min, max and average price of the products in collection 3?
-    result = Product.objects.filter(collection__id=3).aggregate(
-        min_price=Min('unit_price'), max_price=Max('unit_price'), avg_price=Avg('unit_price'))
+    # result = Product.objects.filter(collection__id=3).aggregate(
+    #    min_price=Min('unit_price'), max_price=Max('unit_price'), avg_price=Avg('unit_price'))
 
     # How many orders has customer 1 placed? -> 5
     #result = Order.objects.filter(customer__id=1).aggregate(count=Count('id'))
@@ -64,4 +85,4 @@ def say_hello(request):
     # Order items for products in collection 3
     # query_set = OrderItem.objects.filter(product__collection__id=3)
 
-    return render(request, 'hello.html', {'name': 'John', 'result': result})
+    return render(request, 'hello.html', {'name': 'John', 'result': list(queryset)})
