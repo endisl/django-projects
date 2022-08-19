@@ -1,15 +1,26 @@
 from django.shortcuts import render
-from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField
+from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField, Count
 from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.contenttypes.models import ContentType
 from store.models import Collection, Customer, Order, OrderItem, Product
+from tags.models import TaggedItem
 
 
 def say_hello(request):
-    discounted_price = ExpressionWrapper(
-        F('unit_price') * 0.8, output_field=DecimalField())
-    queryset = Product.objects.annotate(discounted_price=discounted_price)
+    content_type = ContentType.objects.get_for_model(Product)
+
+    queryset = TaggedItem.objects \
+        .select_related('tag') \
+        .filter(
+            content_type=content_type,
+            object_id=1
+        )
+
+    # discounted_price = ExpressionWrapper(
+    #    F('unit_price') * 0.8, output_field=DecimalField())
+    #queryset = Product.objects.annotate(discounted_price=discounted_price)
 
     #queryset = Customer.objects.annotate(orders_count=Count('order'))
 
