@@ -5,16 +5,20 @@ from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
+from django.db import connection
 from store.models import Collection, Customer, Order, OrderItem, Product
 from tags.models import TaggedItem
 
 
 @transaction.atomic()
 def say_hello(request):
+    with connection.cursor() as cursor:
+        cursor.execute('')
+        cursor.callproc('get_customers', [10, 20, 'abc'])
 
-    # ...
+    #queryset = Product.objects.raw('SELECT id, title FROM store_product')
 
-    with transaction.atomic():
+    """ with transaction.atomic():
         order = Order()
         order.customer_id = -1
         order.save()
@@ -24,7 +28,7 @@ def say_hello(request):
         item.product_id = 1
         item.quantity = 1
         item.unit_price = 10
-        item.save()
+        item.save() """
 
     #collection = Collection(pk=12)
     # collection.delete()
@@ -119,4 +123,4 @@ def say_hello(request):
     # Order items for products in collection 3
     # query_set = OrderItem.objects.filter(product__collection__id=3)
 
-    return render(request, 'hello.html', {'name': 'John', })
+    return render(request, 'hello.html', {'name': 'John', 'result': list(queryset)})
