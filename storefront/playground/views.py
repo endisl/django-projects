@@ -9,7 +9,16 @@ from tags.models import TaggedItem
 
 
 def say_hello(request):
-    queryset = TaggedItem.objects.get_tags_for(Product, 1)
+    collection = Collection()
+    collection.title = 'Video Games'
+    collection.featured_product = Product(pk=1)
+    #collection.featured_product_id = 1
+    collection.save()
+
+    #collection = Collection.objects.create(title='a', featured_product_id=1)
+    # collection.id
+
+    #queryset = TaggedItem.objects.get_tags_for(Product, 1)
 
     # discounted_price = ExpressionWrapper(
     #    F('unit_price') * 0.8, output_field=DecimalField())
@@ -89,4 +98,4 @@ def say_hello(request):
     # Order items for products in collection 3
     # query_set = OrderItem.objects.filter(product__collection__id=3)
 
-    return render(request, 'hello.html', {'name': 'John', 'result': list(queryset)})
+    return render(request, 'hello.html', {'name': 'John', })
