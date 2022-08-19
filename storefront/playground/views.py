@@ -11,16 +11,20 @@ from tags.models import TaggedItem
 
 @transaction.atomic()
 def say_hello(request):
-    order = Order()
-    order.customer_id = 1
-    order.save()
 
-    item = OrderItem()
-    item.order = order
-    item.product_id = 1
-    item.quantity = 1
-    item.unit_price = 10
-    item.save()
+    # ...
+
+    with transaction.atomic():
+        order = Order()
+        order.customer_id = -1
+        order.save()
+
+        item = OrderItem()
+        item.order = order
+        item.product_id = 1
+        item.quantity = 1
+        item.unit_price = 10
+        item.save()
 
     #collection = Collection(pk=12)
     # collection.delete()
