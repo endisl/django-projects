@@ -4,16 +4,33 @@ from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 from store.models import Collection, Customer, Order, OrderItem, Product
 from tags.models import TaggedItem
 
 
+@transaction.atomic()
 def say_hello(request):
-    collection = Collection()
-    collection.title = 'Video Games'
-    collection.featured_product = Product(pk=1)
+    order = Order()
+    order.customer_id = 1
+    order.save()
+
+    item = OrderItem()
+    item.order = order
+    item.product_id = 1
+    item.quantity = 1
+    item.unit_price = 10
+    item.save()
+
+    #collection = Collection(pk=12)
+    # collection.delete()
+    #collection.featured_product = None
     #collection.featured_product_id = 1
-    collection.save()
+    # collection.save()
+
+    # Collection.objects.filter(id__gt=5).delete()
+
+    # Collection.objects.filter(pk=11).update(featured_product=None)
 
     #collection = Collection.objects.create(title='a', featured_product_id=1)
     # collection.id
