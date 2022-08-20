@@ -12,11 +12,11 @@ from tags.models import TaggedItem
 
 @transaction.atomic()
 def say_hello(request):
-    with connection.cursor() as cursor:
-        cursor.execute('')
-        cursor.callproc('get_customers', [10, 20, 'abc'])
+    # with connection.cursor() as cursor:
+    #    cursor.execute('')
+    #    cursor.callproc('get_customers', [10, 20, 'abc'])
 
-    #queryset = Product.objects.raw('SELECT id, title FROM store_product')
+    queryset = Product.objects.raw('SELECT id, title FROM store_product')
 
     """ with transaction.atomic():
         order = Order()
