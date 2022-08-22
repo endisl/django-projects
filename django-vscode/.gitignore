@@ -1,1 +1,3 @@
 .venv
+static_collected/admin
+web_project/settings.py
