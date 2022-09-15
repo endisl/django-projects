@@ -1,21 +1,34 @@
-from django.core.mail import send_mail, mail_admins, BadHeaderError
+from django.core.mail import EmailMessage, BadHeaderError
 from django.shortcuts import render
+from templated_mail.mail import BaseEmailMessage
 
-from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField, Count
-from django.db.models.functions import Concat
-from django.db.models.aggregates import Count, Max, Min, Avg, Sum
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.contenttypes.models import ContentType
-from django.db import transaction
-from django.db import connection
-from store.models import Collection, Customer, Order, OrderItem, Product
-from tags.models import TaggedItem
+#from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField, Count
+#from django.db.models.functions import Concat
+#from django.db.models.aggregates import Count, Max, Min, Avg, Sum
+#from django.core.exceptions import ObjectDoesNotExist
+#from django.contrib.contenttypes.models import ContentType
+#from django.db import transaction
+#from django.db import connection
+#from store.models import Collection, Customer, Order, OrderItem, Product
+#from tags.models import TaggedItem
 
 
-@transaction.atomic()
+# @transaction.atomic()
 def say_hello(request):
     try:
-        mail_admins('subject', 'message', html_message='message')
+        message = BaseEmailMessage(
+            template_name='emails/hello.html',
+            context={'name': 'Ndion'}
+        )
+        message.send(['sicocar@ndionbuy.com'])
+
+        # message = EmailMessage('subject', 'message',
+        #                       'info@ndionbuy.com', ['vandeste@ndionbuy.com'])
+        # message.attach_file('playground/static/images/hacking.jpg')
+        # message.send()
+
+        #mail_admins('subject', 'message', html_message='message')
+
         #send_mail('subject', 'message', 'info@ndionbuy.com', ['john@ndionbuy.com'])
     except BadHeaderError:
         pass
