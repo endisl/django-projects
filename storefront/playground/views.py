@@ -1,4 +1,6 @@
+from django.core.mail import send_mail, mail_admins, BadHeaderError
 from django.shortcuts import render
+
 from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField, Count
 from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Max, Min, Avg, Sum
@@ -12,11 +14,18 @@ from tags.models import TaggedItem
 
 @transaction.atomic()
 def say_hello(request):
+    try:
+        mail_admins('subject', 'message', html_message='message')
+        #send_mail('subject', 'message', 'info@ndionbuy.com', ['john@ndionbuy.com'])
+    except BadHeaderError:
+        pass
+    return render(request, 'hello.html', {'name': 'Ndion'})
+
     # with connection.cursor() as cursor:
     #    cursor.execute('')
     #    cursor.callproc('get_customers', [10, 20, 'abc'])
 
-    queryset = Product.objects.raw('SELECT id, title FROM store_product')
+    #queryset = Product.objects.raw('SELECT id, title FROM store_product')
 
     """ with transaction.atomic():
         order = Order()
@@ -123,4 +132,4 @@ def say_hello(request):
     # Order items for products in collection 3
     # query_set = OrderItem.objects.filter(product__collection__id=3)
 
-    return render(request, 'hello.html', {'name': 'John', 'result': list(queryset)})
+    # return render(request, 'hello.html', {'name': 'John', 'result': list(queryset)})

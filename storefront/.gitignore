@@ -3,8 +3,3 @@
 storefront/settings.py
 db.sqlite3
 media
-core/__pycache__
-likes/__pycache__
-playground/__pycache__
-store/__pycache__
-storefront/__pycache__
