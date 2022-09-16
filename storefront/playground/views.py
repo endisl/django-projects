@@ -1,7 +1,8 @@
-from django.core.mail import EmailMessage, BadHeaderError
 from django.shortcuts import render
-from templated_mail.mail import BaseEmailMessage
+from .tasks import notify_customers
 
+#from templated_mail.mail import BaseEmailMessage
+#from django.core.mail import EmailMessage, BadHeaderError
 #from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField, Count
 #from django.db.models.functions import Concat
 #from django.db.models.aggregates import Count, Max, Min, Avg, Sum
@@ -15,24 +16,28 @@ from templated_mail.mail import BaseEmailMessage
 
 # @transaction.atomic()
 def say_hello(request):
-    try:
+    notify_customers.delay('Hello')
+
+    return render(request, 'hello.html', {'name': 'Ndion'})
+
+    """ try:
         message = BaseEmailMessage(
             template_name='emails/hello.html',
             context={'name': 'Ndion'}
         )
-        message.send(['sicocar@ndionbuy.com'])
+        message.send(['sicocar@ndionbuy.com']) """
 
-        # message = EmailMessage('subject', 'message',
-        #                       'info@ndionbuy.com', ['vandeste@ndionbuy.com'])
-        # message.attach_file('playground/static/images/hacking.jpg')
-        # message.send()
+    # message = EmailMessage('subject', 'message',
+    #                       'info@ndionbuy.com', ['vandeste@ndionbuy.com'])
+    # message.attach_file('playground/static/images/hacking.jpg')
+    # message.send()
 
-        #mail_admins('subject', 'message', html_message='message')
+    #mail_admins('subject', 'message', html_message='message')
 
-        #send_mail('subject', 'message', 'info@ndionbuy.com', ['john@ndionbuy.com'])
-    except BadHeaderError:
+    #send_mail('subject', 'message', 'info@ndionbuy.com', ['john@ndionbuy.com'])
+    """ except BadHeaderError:
         pass
-    return render(request, 'hello.html', {'name': 'Ndion'})
+    return render(request, 'hello.html', {'name': 'Ndion'}) """
 
     # with connection.cursor() as cursor:
     #    cursor.execute('')
