@@ -1,6 +1,7 @@
+from django.core.cache import cache
 from django.shortcuts import render
-from .tasks import notify_customers
-
+import requests
+#from .tasks import notify_customers
 #from templated_mail.mail import BaseEmailMessage
 #from django.core.mail import EmailMessage, BadHeaderError
 #from django.db.models import Value, F, Q, Func, ExpressionWrapper, DecimalField, Count
@@ -16,9 +17,15 @@ from .tasks import notify_customers
 
 # @transaction.atomic()
 def say_hello(request):
-    notify_customers.delay('Hello')
+    key = 'httpbin_result'
+    if cache.get(key) is None:
+        response = requests.get('https://httpbin.org/delay/2')
+        data = response.json()
+        cache.set(key, data)
 
-    return render(request, 'hello.html', {'name': 'Ndion'})
+    return render(request, 'hello.html', {'name': cache.get(key)})
+
+    # notify_customers.delay('Owner')
 
     """ try:
         message = BaseEmailMessage(
