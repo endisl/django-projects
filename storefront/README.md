@@ -10,8 +10,12 @@ A complete e-commerce platform with an admin interface.
 - celery: background tasks
 - redis: caching
 - jwt: authentication
+- djoser: custom user model
+- uuid: UUID for cart objects
 - locust: performance testing
-- whitenoise: static files
+- whitenoise: serving static assets
 - debug_toolbar: debugging
+- logging: logging to file and console
+- model_bakery: fixtures for testing
 - pytest: automated testing
 - gunicorn: production server
