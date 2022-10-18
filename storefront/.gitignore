@@ -1,5 +1,7 @@
 .venv
 *.pyc
-storefront/settings.py
+storefront/settings/
 db.sqlite3
 media
+static
+general.log
