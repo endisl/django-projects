@@ -53,7 +53,7 @@ class HelloView(APIView):
 
     # message = EmailMessage('subject', 'message',
     #                       'info@ndionbuy.com', ['vandeste@ndionbuy.com'])
-    # message.attach_file('playground/static/images/hacking.jpg')
+    # message.attach_file('/static/images/hacking.jpg')
     # message.send()
 
     #mail_admins('subject', 'message', html_message='message')
