@@ -1,6 +1,6 @@
 # e-commerce
 
-A complete e-commerce solution with an admin interface.
+A complete e-commerce solution with a customized admin interface.
 
 ## Technologies
 
@@ -24,3 +24,7 @@ A complete e-commerce solution with an admin interface.
 - djecrety: secret key generator
 - dj-database-url: database config in prod
 - docker: containerization of the app
+
+## Development tips
+
+- pylint-django
