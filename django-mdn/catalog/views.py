@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from .models import Author, Book, BookInstance, Genre
 
@@ -42,3 +42,7 @@ class BookListView(generic.ListView):
         context = super(BookListView, self).get_context_data(**kwargs)
         context['some_data'] = 'Some data'
         return context
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
