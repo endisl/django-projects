@@ -1,9 +1,10 @@
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpRequest
+from django.shortcuts import render
 from django.views import generic
 from .models import Author, Book, BookInstance, Genre
 
 
-def index(request):
+def index(request: HttpRequest):
     """View function for home page of site."""
 
     num_books = Book.objects.all().count()
@@ -20,13 +21,17 @@ def index(request):
     num_genres_fiction = Genre.objects.filter(
         name__icontains='fiction').count()
 
+    num_visits = request.session.get('num_vists', 0)
+    request.session['num_visits'] = num_visits + 1
+
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
         'num_books_vent': num_books_vent,
-        'num_genres_fiction': num_genres_fiction
+        'num_genres_fiction': num_genres_fiction,
+        'num_visits': num_visits,
     }
 
     return render(request, 'index.html', context=context)
