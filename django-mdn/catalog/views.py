@@ -1,7 +1,12 @@
+import datetime
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpRequest
-from django.shortcuts import render
-from django.views import generic
+from django.http import HttpRequest, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse, reverse_lazy
+from .forms import RenewBookForm
 from .models import Author, Book, BookInstance, Genre
 
 
@@ -38,7 +43,7 @@ def index(request: HttpRequest):
     return render(request, 'index.html', context=context)
 
 
-class BookListView(generic.ListView):
+class BookListView(ListView):
     model = Book
     paginate_by = 10
 
@@ -51,19 +56,19 @@ class BookListView(generic.ListView):
     #     return context
 
 
-class BookDetailView(generic.DetailView):
+class BookDetailView(DetailView):
     model = Book
 
 
-class AuthorListView(generic.ListView):
+class AuthorListView(ListView):
     model = Author
 
 
-class AuthorDetailView(generic.DetailView):
+class AuthorDetailView(DetailView):
     model = Author
 
 
-class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+class LoanedBooksByUserListView(LoginRequiredMixin, ListView):
     "Generic class-based view listing books on loan to current user"
     model = BookInstance
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
@@ -73,7 +78,7 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
 
 
-class LoanedAllBooksListView(PermissionRequiredMixin, generic.ListView):
+class LoanedAllBooksListView(PermissionRequiredMixin, ListView):
     "Generic class-based view listing all books on loan"
     model = BookInstance
     template_name = 'catalog/bookinstance_list_all_borrowed.html'
@@ -82,3 +87,43 @@ class LoanedAllBooksListView(PermissionRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
+
+
+@login_required
+@permission_required('catalog.can_mark_returned', raise_exception=True)
+def renew_book_librarian(request, pk):
+    """View function for renewing a specific BookInstance by librarian."""
+    book_instance = get_object_or_404(BookInstance, pk=pk)
+
+    if request.method == 'POST':
+        form = RenewBookForm(request.POST)
+        if form.is_valid():
+            book_instance.due_back = form.cleaned_data['renewal_date']
+            book_instance.save()
+
+            return HttpResponseRedirect(reverse('all-borrowed'))
+    else:
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
+
+    context = {
+        'form': form,
+        'book_instance': book_instance
+    }
+
+    return render(request, 'catalog/book_renew_librarian.html', context)
+
+
+class AuthorCreate(CreateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+
+
+class AuthorUpdate(UpdateView):
+    model = Author
+    fields = '__all__'
+
+
+class AuthorDelete(DeleteView):
+    model = Author
+    success_url = reverse_lazy('authors')
