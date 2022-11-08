@@ -19,6 +19,3 @@ class RenewBookForm(forms.Form):
                 _('Invalid date - renewal more than 4 weeks ahead'))
 
         return data
-
-
-fields = '__all__'
