@@ -303,3 +303,24 @@ class RenewBookInstancesViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'renewal_date',
                              'Invalid date - renewal more than 4 weeks ahead')
+
+
+class AuthorCreateViewTest(TestCase):
+    def setUp(self):
+        # Create two users
+        test_user1 = User.objects.create_user(
+            username='testuser1', password='1X<ISRUkw+tuE')
+        test_user2 = User.objects.create_user(
+            username='testuser2', password='2HJ1vRV0Z&3iL')
+
+        test_user1.save()
+        test_user2.save()
+
+        # Give test_user2 permission to create authors
+        permission = Permission.objects.get(name='Set book as returned')
+        test_user2.user_permissions.add(permission)
+        test_user2.save()
+
+        # Create an author
+        test_author = Author.objects.create(
+            first_name='John', last_name='Smith')
