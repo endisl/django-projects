@@ -28,3 +28,9 @@ A complete e-commerce solution with a customized admin interface.
 ## Development tips
 
 - pylint-django
+
+- requirements.txt  
+create file:  
+pip freeze > requirements.txt  
+install packages:  
+pip install -r rerquirements.txt  
