@@ -27,10 +27,16 @@ A complete e-commerce solution with a customized admin interface.
 
 ## Development tips
 
-- pylint-django
+- pylint-django  
+install the package:  
+pip (or pipenv) install pylint-django   
+create this file (doesn't have an extension) in the root of the project:  
+.pylintrc  
+type the following command in the created file:  
+load-plugins=pylint-django  
 
 - requirements.txt  
-create file:  
+create the file and write the packages in it:  
 pip freeze > requirements.txt  
-install packages:  
-pip install -r rerquirements.txt  
+install the packages (after cloning for instance a project on GitHub):  
+pip install -r requirements.txt  
