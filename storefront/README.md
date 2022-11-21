@@ -40,3 +40,8 @@ create the file and write the packages in it:
 pip freeze > requirements.txt  
 install the packages (after cloning for instance a project on GitHub):  
 pip install -r requirements.txt  
+
+- MRO (Method Resolution Order) in inheritance  
+e.g. see django-mdn project  
+class AuthorCreate(CreateView, PermissionRequiredMixin): -> permission not applied  
+class AuthorCreate(PermissionRequiredMixin, CreateView): -> permission applied  
