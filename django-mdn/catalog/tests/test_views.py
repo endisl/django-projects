@@ -322,5 +322,29 @@ class AuthorCreateViewTest(TestCase):
         test_user2.save()
 
         # Create an author
-        test_author = Author.objects.create(
+        self.test_author = Author.objects.create(
             first_name='John', last_name='Smith')
+
+    def test_form_date_of_death_initially_has_date_12102016(self):
+        login = self.client.login(
+            username='testuser2', password='2HJ1vRV0Z&3iL')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 200)
+        date_of_death = datetime.datetime.strptime('2016/10/21', '%Y/%m/%d')
+        self.assertEqual(
+            response.context['form'].initial['date_of_death'], date_of_death)
+
+    def test_uses_correct_template(self):
+        login = self.client.login(
+            username='testuser2', password='2HJ1vRV0Z&3iL')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'catalog/author_form.html')
+
+    def test_redirects_to_all_authors_list_on_success(self):
+        login = self.client.login(
+            username='testuser2', password='2HJ1vRV0Z&3iL')
+        date_of_death = datetime.datetime.strptime('21/10/2016', '%d/%m/%Y')
+        response = self.client.post(reverse('author-create', kwargs={
+                                    'pk': self.test_author.pk, }), {'date_of_death': date_of_death})
+        self.assertRedirects(response, reverse('all-authors'))
