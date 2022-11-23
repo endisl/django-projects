@@ -15,6 +15,16 @@ class AuthorModelTest(TestCase):
         field_label = author._meta.get_field('first_name').verbose_name
         self.assertEqual(field_label, 'first name')
 
+    def test_last_name_label(self):
+        author = Author.objects.get(id=1)
+        field_label = author._meta.get_field('last_name').verbose_name
+        self.assertEqual(field_label, 'last name')
+
+    def test_date_of_birth_label(self):
+        author = Author.objects.get(id=1)
+        field_label = author._meta.get_field('date_of_birth').verbose_name
+        self.assertEqual(field_label, 'date of birth')
+
     def test_date_of_death_label(self):
         author = Author.objects.get(id=1)
         field_label = author._meta.get_field('date_of_death').verbose_name
@@ -23,6 +33,11 @@ class AuthorModelTest(TestCase):
     def test_first_name_max_length(self):
         author = Author.objects.get(id=1)
         max_length = author._meta.get_field('first_name').max_length
+        self.assertEqual(max_length, 100)
+
+    def test_last_name_max_length(self):
+        author = Author.objects.get(id=1)
+        max_length = author._meta.get_field('last_name').max_length
         self.assertEqual(max_length, 100)
 
     def test_object_name_is_last_name_comma_first_name(self):
