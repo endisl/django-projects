@@ -34,6 +34,7 @@ class AuthorListViewTest(TestCase):
 
     def test_pagination_is_ten(self):
         response = self.client.get(reverse('authors'))
+        # print(response.context)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
         self.assertTrue(response.context['is_paginated'] == True)
@@ -137,6 +138,26 @@ class LoanedBookInstanceByUserListView(TestCase):
         for bookitem in response.context['bookinstance_list']:
             self.assertEqual(response.context['user'], bookitem.borrower)
             self.assertEqual(bookitem.status, 'o')
+
+    def test_pages_paginated_to_ten(self):
+        # Change all books to be on loan
+        # This should make 15 test user ones
+        for copy in BookInstance.objects.all():
+            copy.status = 'o'
+            copy.save()
+
+        login = self.client.login(
+            username='testuser1', password='1X<ISRUkw+tuE')
+        response = self.client.get(reverse('my-borrowed'))
+
+        # Check our user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 200)
+
+        # Confirm that only 10 items are displayed due to pagination
+        # (if pagination not enabled, there would be 15 returned)
+        self.assertEqual(len(response.context['bookinstance_list']), 10)
 
     def test_pages_ordered_by_due_date(self):
         # Change all books to be on loan
