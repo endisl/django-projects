@@ -132,6 +132,7 @@ class LoanedBookInstanceByUserListView(TestCase):
         self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+
         self.assertTrue('bookinstance_list' in response.context)
 
         # Confirm all books belong to testuser1 and are on loan
@@ -345,6 +346,18 @@ class AuthorCreateViewTest(TestCase):
         # Create an author
         self.test_author = Author.objects.create(
             first_name='John', last_name='Smith')
+
+    def test_redirect_if_not_logged_in(self):
+        pass
+
+    def test_forbidden_if_logged_in_but_not_correct_permission(self):
+        pass
+
+    def test_logged_in_with_permission(self):
+        pass
+
+    def test_redirects_to_detail_view_on_success(self):
+        pass
 
     def test_form_date_of_death_initially_has_date_12102016(self):
         login = self.client.login(
