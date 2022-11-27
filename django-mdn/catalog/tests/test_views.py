@@ -179,7 +179,7 @@ class LoanedBookInstanceByUserListView(TestCase):
         # Ckeck the items are ordered by due_back
         last_date = 0
         for book in response.context['bookinstance_list']:
-            if last_date == 0:
+            if last_date == 0:  # executed only once to set the last_date of the first book
                 last_date = book.due_back
             else:
                 self.assertTrue(last_date <= book.due_back)
@@ -348,15 +348,17 @@ class AuthorCreateViewTest(TestCase):
             first_name='John', last_name='Smith')
 
     def test_redirect_if_not_logged_in(self):
-        pass
+        response = self.client.get(reverse('author-create'))
+        self.assertRedirects(
+            response, '/accounts/login/?next=/catalog/author/create')
 
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
-        pass
+        login = self.client.login(
+            username='testuser1', password='1X<ISRUkw+tuE')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 403)
 
     def test_logged_in_with_permission(self):
-        pass
-
-    def test_redirects_to_detail_view_on_success(self):
         pass
 
     def test_form_date_of_death_initially_has_date_12102016(self):
@@ -374,6 +376,9 @@ class AuthorCreateViewTest(TestCase):
         response = self.client.get(reverse('author-create'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'catalog/author_form.html')
+
+    def test_redirects_to_detail_view_on_success(self):
+        pass
 
     def test_redirects_to_all_authors_list_on_success(self):
         login = self.client.login(
