@@ -90,7 +90,7 @@ class LoanedBookInstanceByUserListView(TestCase):
                 status=status
             )
 
-    def test_redirect_if_not_logged_in(self):
+    def test_redirects_if_not_logged_in(self):
         response = self.client.get(reverse('my-borrowed'))
         self.assertRedirects(
             response, '/accounts/login/?next=/catalog/mybooks/')
@@ -240,10 +240,10 @@ class RenewBookInstancesViewTest(TestCase):
             status='o',
         )
 
-    def test_redirect_if_not_logged_in(self):
+    def test_redirects_if_not_logged_in(self):
         response = self.client.get(
             reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}))
-        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        # Manually check redirect (Can't use assertRedirects, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.url.startswith('/accounts/login/'))
 
@@ -344,13 +344,12 @@ class AuthorCreateViewTest(TestCase):
         test_user2.save()
 
         # Create an author
-        self.test_author = Author.objects.create(
-            first_name='John', last_name='Smith')
+        # Author.objects.create(first_name='John', last_name='Smith')
 
-    def test_redirect_if_not_logged_in(self):
+    def test_redirects_if_not_logged_in(self):
         response = self.client.get(reverse('author-create'))
         self.assertRedirects(
-            response, '/accounts/login/?next=/catalog/author/create')
+            response, '/accounts/login/?next=/catalog/author/create/')
 
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(
@@ -359,16 +358,10 @@ class AuthorCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_logged_in_with_permission(self):
-        pass
-
-    def test_form_date_of_death_initially_has_date_12102016(self):
         login = self.client.login(
             username='testuser2', password='2HJ1vRV0Z&3iL')
         response = self.client.get(reverse('author-create'))
         self.assertEqual(response.status_code, 200)
-        date_of_death = datetime.datetime.strptime('2016/10/21', '%Y/%m/%d')
-        self.assertEqual(
-            response.context['form'].initial['date_of_death'], date_of_death)
 
     def test_uses_correct_template(self):
         login = self.client.login(
@@ -377,13 +370,28 @@ class AuthorCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'catalog/author_form.html')
 
-    def test_redirects_to_detail_view_on_success(self):
-        pass
-
-    def test_redirects_to_all_authors_list_on_success(self):
+    def test_form_date_of_death_initially_set_to_expected_date(self):
         login = self.client.login(
             username='testuser2', password='2HJ1vRV0Z&3iL')
-        date_of_death = datetime.datetime.strptime('21/10/2016', '%d/%m/%Y')
-        response = self.client.post(reverse('author-create', kwargs={
-                                    'pk': self.test_author.pk, }), {'date_of_death': date_of_death})
-        self.assertRedirects(response, reverse('all-authors'))
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 200)
+
+        expected_initial_date = datetime.date(2021, 10, 21)  # 2021-10-21
+        # print(response.context['form'])
+        response_date = response.context['form'].initial['date_of_death']  # '''21/10/2021'''
+        response_date = datetime.datetime.strptime(
+            response_date, '%d/%m/%Y').date()  # 2021-10-21
+        self.assertEqual(response_date, expected_initial_date)
+
+    def test_redirects_to_detail_view_on_success(self):
+        login = self.client.login(
+            username='testuser2', password='2HJ1vRV0Z&3iL')
+        response = self.client.post(
+            reverse('author-create'), {'first_name': 'John', 'last_name': 'Smith'})
+
+        # Checking redirect manually
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/catalog/author/'))
+
+        # Or using the id of the created author (above)
+        #self.assertRedirects(response, reverse('author-detail'))
