@@ -7,7 +7,7 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from .forms import RenewBookForm
-from .models import Blog, Blogger
+from .models import Author, Book, BookInstance, Genre
 
 
 def index(request: HttpRequest):
