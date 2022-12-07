@@ -24,8 +24,6 @@ class Blogger(models.Model):
     name = models.CharField(max_length=100)
     bio = models.TextField(
         max_length=1000, help_text="Enter the bio of this blogger.")
-    blog = models.ForeignKey(
-        'Blog', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name

@@ -2,4 +2,9 @@
 <title>MyBlog</title>
 {% endblock %} {% block content %}
 <p>Welcome to UniversalBlog!</p>
+<h2>Dynamic content</h2>
+<p>The UniversalBlog has the following record counts:</p>
+<ul>
+  <li><strong>Blogs: </strong>{{ num_blogs }}</li>  
+</ul>
 {% endblock %}
