@@ -7,24 +7,27 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from .forms import RenewBookForm
-from .models import Author, Book, BookInstance, Genre
+from .models import Blog, Blogger, Comment
 
 
-class BlogListView():
-    pass
+class BlogListView(ListView):
+    model = Blog
+    paginate_by = 5
 
 
-class BloggerListView():
-    pass
+class BlogDetailView(DetailView):
+    model = Blog
 
 
-class BlogDetailView():
-    pass
+class BloggerListView(ListView):
+    model = Blogger
 
 
-class BloggerDetailView():
-    pass
+class BloggerDetailView(DetailView):
+    model = Blogger
 
 
-class BlogCreate():
-    pass
+class CommentCreate(CreateView):
+    model = Blog
+    fields = ['author', 'post_date', 'description']
+    permission_required = 'blog.can_create_comment'
