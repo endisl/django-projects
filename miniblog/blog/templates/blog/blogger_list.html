@@ -8,9 +8,7 @@
   {% for blogger in blogger_list %}
 
   <li>
-    <a href="{{ blogger.get_absolute_url }}"
-      >{{ blogger }} ({{ blogger.date_of_birth }} - {{ blogger.date_of_death }})
-    </a>
+    <a href="{{ blogger.get_absolute_url }}">{{ blogger }}</a>
   </li>
 
   {% endfor %}

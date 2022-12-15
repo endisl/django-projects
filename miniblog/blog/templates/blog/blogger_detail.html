@@ -1,13 +1,13 @@
 {% extends 'base_generic.html' %} {% block content %}
 
-<h1>Blogger: {{ blogger }}</h1>
+<h1>Blogger: {{ blogger.name }}</h1>
 
-<h2>Bio</p>
-{{ bio }}
+<h2>Bio</h2>
+<p>{{ blogger.bio }}</p>
 
 <h2>Blogs list</h2>
   {% for blog in blogger.blog_set.all %}
-  <p><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a>({{ blog.post_date }})</p>
+  <p><a href="{{ blog.get_absolute_url }}">{{ blog.title }} </a>({{ blog.post_date }})</p>
   {% endfor %}
 </div>
 {% endblock %}
