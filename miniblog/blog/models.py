@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class Blog(models.Model):
     title = models.CharField(max_length=200)
-    author = models.ForeignKey('Blogger', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     post_date = models.DateField()
     description = models.TextField(
         max_length=1000, help_text="Enter the description of this blog.")
@@ -33,15 +33,13 @@ class Blogger(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey('Blogger', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     post_date = models.DateField()
     description = models.TextField(
         max_length=1000, help_text="Enter comment about blog here.")
     blog = models.ForeignKey(
         Blog, on_delete=models.SET_NULL, null=True)
-    blogger = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True)
-
+    
     def __str__(self):
         return self.description
 
