@@ -30,7 +30,8 @@ class Blogger(models.Model):
         ordering = ['user', 'bio']
 
     def __str__(self):
-        return self.user.username
+        if self.user:
+            return self.user.username
 
     def get_absolute_url(self):
         return reverse("blogger-detail", args=[str(self.id)])

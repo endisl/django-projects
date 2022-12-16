@@ -33,6 +33,7 @@ class BlogDetailView(DetailView):
 
 class BloggerListView(ListView):
     model = Blogger
+    paginate_by = 5
 
 
 class BloggerDetailView(DetailView):
