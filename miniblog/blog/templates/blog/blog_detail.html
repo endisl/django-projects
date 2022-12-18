@@ -13,13 +13,13 @@
 <div style="margin-left: 20px; margin-top: 20px">
   <h4>Comments</h4>
   {% for comment in blog.comment_set.all %}
-  <hr/>
+  <hr>
   <p>
-    {{ comment.get_status_display }}
+    {{ comment.author }} ({{ comment.post_date }}) - {{ comment.description }}
   </p>
   {% endfor %}
   {% if user.is_authenticated %}             
-    <li><a href="{% url 'create-comment' %}?next={{request.path}}">Add a new comment</a></li>
+    <li><a href="{% url 'create_comment' blog.id %}">Add a new comment</a></li>
   {% else %}
     <li><a href="{% url 'login' %}?next={{request.path}}">Login </a>to add a new comment</li>
   {% endif %}     

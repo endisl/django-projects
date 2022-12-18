@@ -14,9 +14,11 @@ def index(request: HttpRequest):
     """View function for home page of site."""
 
     num_blogs = Blog.objects.all().count()
+    num_bloggers = Blogger.objects.all().count()
 
     context = {
         'num_blogs': num_blogs,
+        'num_bloggers': num_bloggers,
     }
 
     return render(request, 'index.html', context=context)

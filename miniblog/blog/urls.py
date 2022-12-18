@@ -5,8 +5,9 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('blogs/', views.BlogListView.as_view(), name='blogs'),
     path('bloggers/', views.BloggerListView.as_view(), name='bloggers'),
-    path('blog/<int:pk>', views.BlogDetailView.as_view(), name='blog-detail'),
+    path('<int:pk>', views.BlogDetailView.as_view(), name='blog-detail'),
     path('blogger/<int:pk>', views.BloggerDetailView.as_view(),
          name='blogger-detail'),
-    path('blog/<int:pk>/create/', views.create_comment, name='create_comment')
+    path('<int:pk>/create/',
+         views.CommentCreate.as_view(), name='create_comment')
 ]
