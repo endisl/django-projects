@@ -40,27 +40,19 @@ class BloggerDetailView(DetailView):
     model = Blogger
 
 
-@login_required
-@permission_required('catalog.can_create_comment', raise_exception=True)
-def create_comment(request, pk):
-    blog = get_object_or_404(Blog, pk=pk)
+class CommentCreate(LoginRequiredMixin, CreateView):
+    model = Comment
+    fields = ['description', ]
 
-    if request.method == 'POST':
-        form = CreateCommentForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect(reverse('blog-detail'))
-    else:
-        form = CreateCommentForm()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blog'] = get_object_or_404(Blog, pk=self.kwargs['pk'])
+        return context
 
-    context = {
-        'form': form,
-        'blog': blog
-    }
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
+        return super().form_valid(form)
 
-    return render(request, 'blog/blog_create_comment.html', context)
-
-
-# class CommentCreate(CreateView):
-#    model = Comment
-#    fields = ['author', 'post_date', 'description']
-#    permission_required = 'blog.can_create_comment'
+    def get_success_url(self):
+        return reverse('blog-detail', kwargs={'pk': self.kwargs['pk'], })
