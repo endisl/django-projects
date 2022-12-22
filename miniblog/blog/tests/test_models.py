@@ -42,31 +42,50 @@ class BlogModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        pass
+        user1 = User.objects.create_user(
+            username='so-and-so', password='12345')
+        user1.save()
+        author = Blogger.objects.create(user=user1, bio='my bio')
+        Blog.objects.create(title='the origin of life', author=author)
 
     def test_get_absolute_url(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        self.assertEqual(blog.get_absolute_url(), '/blog/1')
 
     def test_title_label(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('title').verbose_name
+        self.assertEqual(field_label, 'title')
 
     def test_title_max_length(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        max_length = blog._meta.get_field('title').max_length
+        self.assertEqual(max_length, 200)
 
     def test_description_label(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('description').verbose_name
+        self.assertEqual(field_label, 'description')
 
     def test_description_max_length(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        max_length = blog._meta.get_field('description').max_length
+        self.assertEqual(max_length, 2000)
 
     def test_date_label(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('post_date').verbose_name
+        self.assertEqual(field_label, 'post date')
 
     def test_date(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        post_date = blog.post_date
+        self.assertEqual(post_date, datetime.date.today())
 
     def test_object_name(self):
-        pass
+        blog = Blog.objects.get(id=1)
+        expected_object_name = blog.title
+        self.assertEqual(expected_object_name, str(blog))
 
 
 class CommentModelTest(TestCase):
