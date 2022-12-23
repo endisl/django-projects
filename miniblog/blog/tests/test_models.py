@@ -46,7 +46,8 @@ class BlogModelTest(TestCase):
             username='so-and-so', password='12345')
         user1.save()
         author = Blogger.objects.create(user=user1, bio='my bio')
-        Blog.objects.create(title='the origin of life', author=author)
+        Blog.objects.create(title='the origin of life',
+                            author=author, description="c'est la vie")
 
     def test_get_absolute_url(self):
         blog = Blog.objects.get(id=1)
@@ -92,22 +93,43 @@ class CommentModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        pass
+        user1 = User.objects.create_user(
+            username='so-and-so', password='12345')
+        user1.save()
+        user2 = User.objects.create_user(
+            username='comeon', password='abc123')
+        # user2.save()
+        author = Blogger.objects.create(user=user1, bio='my bio')
+        blog = Blog.objects.create(title='the origin of life', author=author)
+        Comment.objects.create(author=user2, blog=blog,
+                               description='make it work, right and fast')
 
     def test_description_label(self):
-        pass
+        comment = Comment.objects.get(id=1)
+        field_label = comment._meta.get_field('description').verbose_name
+        self.assertEqual(field_label, 'description')
 
     def test_description_max_length(self):
-        pass
+        comment = Comment.objects.get(id=1)
+        max_length = comment._meta.get_field('description').max_length
+        self.assertEqual(max_length, 1000)
 
     def test_author_label(self):
-        pass
+        comment = Comment.objects.get(id=1)
+        field_label = comment._meta.get_field('description').verbose_name
+        self.assertEqual(field_label, 'description')
 
     def test_date_label(self):
-        pass
+        comment = Comment.objects.get(id=1)
+        field_label = comment._meta.get_field('post_date').verbose_name
+        self.assertEqual(field_label, 'post date')
 
     def test_blog_label(self):
-        pass
+        comment = Comment.objects.get(id=1)
+        field_label = comment._meta.get_field('blog').verbose_name
+        self.assertEqual(field_label, 'blog')
 
     def test_object_name(self):
-        pass
+        comment = Comment.objects.get(id=1)
+        expected_object_name = comment.description
+        self.assertEqual(expected_object_name, str(comment))
