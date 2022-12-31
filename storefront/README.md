@@ -47,20 +47,20 @@ class AuthorCreate(CreateView, PermissionRequiredMixin): -> permission not appli
 class AuthorCreate(PermissionRequiredMixin, CreateView): -> permission applied  
 
 
-## Admin - Products
+##  Products - Admin
 
-![Screenshot](core/static/products-admin.png)
+![Screenshot](sshots/products-admin.png)
 
-## Admin - Product Item
+##  Product Item - Admin
 
-![Screenshot](core/static/product1.png)
+![Screenshot](sshots/product1.png)
 
-## API - Products
+##  Products - API
 
-![Screenshot](core/static/products-api.png)
+![Screenshot](sshots/products-api.png)
 
 ## Locust
 
-![Screenshot](core/static/locust1.png)
-![Screenshot](core/static/locust2.png)
-![Screenshot](core/static/locust3.png)
+![Screenshot](sshots/locust1.png)
+![Screenshot](sshots/locust2.png)
+![Screenshot](sshots/locust3.png)
