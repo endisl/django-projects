@@ -45,3 +45,22 @@ pip install -r requirements.txt
 e.g. see django-mdn project  
 class AuthorCreate(CreateView, PermissionRequiredMixin): -> permission not applied  
 class AuthorCreate(PermissionRequiredMixin, CreateView): -> permission applied  
+
+
+## Admin - Products
+
+![Screenshot](core/static/products-admin.png)
+
+## Admin - Product Item
+
+![Screenshot](core/static/product1.png)
+
+## API - Products
+
+![Screenshot](core/static/products-api.png)
+
+## Locust
+
+![Screenshot](core/static/locust1.png)
+![Screenshot](core/static/locust2.png)
+![Screenshot](core/static/locust3.png)
